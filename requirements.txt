@@ -1,0 +1,9 @@
+asgiref
+Django
+sqlparse
+typing_extensions
+psycopg2-binary
+six
+python-decouple
+dj-database-url
+whitenoise

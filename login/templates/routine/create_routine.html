@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% csrf_token %}
+    <title>Calistoía</title>
+
+    <link rel="stylesheet" href="{% static '/assets/css/normalize.css' %}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static '/assets/images/logo.jpeg' %}" />
+    <link rel="stylesheet" href="{% static '/assets/css/stylesPrincipal.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <header class="header">
+
+        <div class="barra">
+            <div id="open-close" class="menu__hamburguesa">
+                <span class="line1__menu-hamburguesa"></span>
+                <span class="line2__menu-hamburguesa"></span>
+                <span class="line3__menu-hamburguesa"></span>
+            </div>
+
+            <a class="logo" href="/">
+                <h1 class="logo__nombre no-margin centrar-texto">CALISTOPÍA</h1>
+            </a>
+
+            
+            {% if user.is_authenticated %}
+            <a class="enlaceIngresar" href="/logout/">
+                <p>Perfil</p>
+            </a>
+            {% else %}
+           
+            <a class="enlaceIngresar" href="/login/">
+                <p>Ingresar</p>
+            </a>
+            {% endif %}
+            
+        </div>
+
+    </header>
+
+    <aside id="aside" class="menuLateral">
+
+        <nav class="menuLateral__navegacion">
+            <a href="/about/" class="navegacion__enlace">Nosotros</a>
+            <a href="/feedback/" class="navegacion__enlace">PQRS</a>
+            {% if user.is_authenticated %}
+            <a href="/logout/" class="navegacion__enlace">Cerrar Sesión</a>
+            {% endif %}
+        </nav>
+
+    </aside>
+
+    <div class="routines">
+
+        <a href="/user/" class="back_button">Volver</a>
+
+        <input class="ejercicio_rutina_input_titulo" type="text" placeholder="Nombre de tu nueva rutina">
+        <button class="ejercicio_rutina_button_crear" >Crear</button>
+
+        <div class="ejercicio_rutina">
+            <h4>Aquí se mostrarán los ejercicios que agregues:</h4>
+        </div>
+
+        <div class="filter_catalogue">
+            <div class="filter">
+                <h3>Buscar por:</h3>
+                <form action="/routine/create/" method="POST" class="filter__form">
+                    <label for="name">Nombre:</label>
+                    <input type="text" name="name" class="filter__form__name" id="name">
+
+                    <label for="group">Grupo muscular:</label>
+                    <select name="group" id="group" class="filter__form__group">
+                        <option value="">Todos</option>
+                        <option value="Pierna">Pierna</option>
+                        <option value="Brazo">Brazo</option>
+                        <option value="Abdomen">Abdomen</option>
+                        <option value="Pecho">Pecho</option>
+                        <option value="Espalda">Espalda</option>
+                        <option value="Hombros">Hombros</option>
+                    </select>
+
+                    <label for="level">Dificultad:</label>
+                    <select name="level" id="level" class="filter__form__level">
+                        <option value="">Todos</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+
+                    <button type="submit">Buscar</button>
+
+                </form>
+            </div>
+            {% if catalogue %}
+            <div class="grid">
+
+    
+                {% for exercise in catalogue %}
+        
+                <div class="ejercicio {{ exercise.level }} {{ exercise.group }} {{ exercise.name }}">
+                    <a name="link" href="/exercise/{{ exercise.id }}" target="_blank" >
+                        <img name="imagen" class="ejercicio__imagen" src="{{ exercise.logo }}" alt="imagen ejercicio">
+                        <div name="descripcion" class="ejercicio__informacion">
+                            <p name="nombre" class="ejercicio__nombre">{{ exercise.name }}</p>
+                            <p name="grupo" class="ejercicio__musculo">{{ exercise.group }}</p>
+                        </div>
+                    </a>
+                    <button name="boton" class="ejercicio__agregar">Agregar</button>
+                </div>
+        
+                {% endfor %}
+                
+                
+                <!--Sigue el catálogo...-->
+            </div>
+            {% else %}
+
+            <h2 style="background-color:white">No hay coincidencias, seguimos trabajando para traerte mas ejercicio, perdona las molestias.</h2>
+
+            {% endif %}
+        </div>
+
+    </div>
+
+    <script src="{% static '/assets/js/scriptPaginaPrincipal.js' %}"></script>
+    <script src="{% static '/assets/js/scriptMain.js' %}"></script>
+
+</body>
+</html>

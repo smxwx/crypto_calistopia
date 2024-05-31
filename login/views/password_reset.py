@@ -11,22 +11,32 @@ from ..models import User
 # Create and send reset link to email if user exists
 
 
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from ..models import User
+from ..forms import PasswordResetForm
+
 def password_reset(request):
-    if request.method == "GET":
-        return render(request, "login_register/recover_page.html")
+    if request.method == "POST":
+        form = PasswordResetForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data.get('user')
+            try:
+                user = (
+                    User.objects.get(email=user)
+                    if User.objects.filter(email=user).exists()
+                    else User.objects.get(username=user)
+                )
+                sendEmail(request, user, user.email)
+                messages.success(request, "Fue enviado un email de recuperacion al correo registrado, revisa la bandeja de spam.")
+                return redirect("password_reset")
+            except:
+                messages.error(request, "El usuario no se encuentra registrado")
+                return redirect("password_reset")
     else:
-        try:
-            user = (
-                User.objects.get(email=request.POST["user"])
-                if User.objects.filter(email=request.POST["user"]).exists()
-                else User.objects.get(username=request.POST["user"])
-            )
-            sendEmail(request, user, user.email)
-            messages.success(request, "Fue enviado un email de recuperacion al correo registrado, revisa la bandeja de spam.")
-            return redirect("password_reset")
-        except:
-            messages.error(request, "El usuario no se encuentra registrado")
-            return redirect("password_reset")
+        form = PasswordResetForm()
+    return render(request, "login_register/recover_page.html", {'form': form})
+
 
 
 # If link is valid send reset form and check if form is valid for the user

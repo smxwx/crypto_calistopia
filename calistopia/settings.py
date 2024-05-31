@@ -37,14 +37,11 @@ EMAIL_USE_TLS = config('EMAIL_USE_TLS', cast=bool)
 
 PASSWORD_RESET_TIMEOUT = config('PASSWORD_RESET_TIMEOUT', cast=int)
 
+RECAPTCHA_PUBLIC_KEY = config('RECAPTCHA_PUBLIC_KEY')
+RECAPTCHA_PRIVATE_KEY = config('RECAPTCHA_PRIVATE_KEY')
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG", cast=bool)
-
-#ALLOWED_HOSTS = config('ALLOWED_HOSTS', cast=Csv())
-#CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', cast=Csv())
-
-
-# Application definition
 
 INSTALLED_APPS = [
     "whitenoise.runserver_nostatic",
@@ -55,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'login',
+    'django_recaptcha',
 ]
 
 MIDDLEWARE = [
@@ -81,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },

@@ -18,28 +18,17 @@
 
 </head>
 <body>
-
     <main>
         <div class="contenedor__todo">
-
-
-            <!--Formulario de recuperación de contraseña-->
-
             <div class="contenedor__recover-user">
-                <style>
-                    .contenedor__recover-user form button{
-                        margin-left: 38px;
-                    }
-                </style>
-
-               <form action="/password_reset/" method="POST" class="formulario__recuperación">
+                <form action="/password_reset/" method="POST" class="formulario__recuperación">
                     {% csrf_token %}
                     <h2>Recuperar contraseña</h2>
-                    <input name="user" type="text" placeholder="Nombre de usuario o correo electrónico">
+                    {{ form.user }}
+                    <br><br>
+                    {{ form.captcha }}
                     <a class="forgot-link" href="/">Navega sin cuenta</a>
                     <button>Enviar e-mail de recuperación</button>
-
-
                     {% if messages %}
                     {% for message in messages %}
                     <div class="alerta {{ message.tags }}">
@@ -49,21 +38,15 @@
                             </span>
                         </div>
                         <div class="texto-alerta">
-
-
                             <h5>{{ message }}</h5>
-
                         </div>
                     </div>
                     {% endfor %}
-                    {% endif %}
-
-
+                    {% endif %}
                 </form>
+            </div>
         </div>
     </main>
-
     <script src="{% static '/assets/js/script.js' %}"></script>
-
 </body>
 </html>

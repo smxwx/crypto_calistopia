@@ -29,7 +29,7 @@ def login(request):
                 user.todayLoginAttempts = 0
                 user.save()
 
-            if userTodayLoginAttempts != 10:
+            if userTodayLoginAttempts < 10:
                 password = User.objects.get(username = userName).password
                 if check_password(userPassword, password):
                     if User.objects.get(username = userName).active:
@@ -41,7 +41,7 @@ def login(request):
                         return redirect("main")
 
                     else:
-                        messages.info(request, f"La cuenta no ha sido activa, porfavor usa el link enviado a tu correo para activarla.")
+                        messages.info(request, f"La cuenta no ha sido activada, porfavor usa el link enviado a tu correo para activarla.")
                         return redirect("login")
                 else:
                     user = User.objects.get(username=userName)
@@ -53,9 +53,9 @@ def login(request):
                     History.objects.create_history(user,"Login Fallido")
                     return redirect("login")
             else:
-                    History.objects.create_history(request.user,"Login Fallido")
                     messages.error(request, f"Lo sentimos. No tienes más intentos disponibles hoy.")
                     return redirect("login")
+            
         elif User.objects.filter(email = userName.lower()).exists():
             userTodayLoginAttempts = User.objects.get(email=userName.lower()).todayLoginAttempts
 
@@ -64,7 +64,7 @@ def login(request):
                 user.todayLoginAttempts = 0
                 user.save()
 
-            if userTodayLoginAttempts != 10:
+            if userTodayLoginAttempts < 10:
                 password = User.objects.get(email=userName.lower()).password
                 if check_password(userPassword, password):
                     if User.objects.get(email = userName.lower()).active:
@@ -74,7 +74,7 @@ def login(request):
                         cookie(request, user)
                         return redirect("main")
                     else:
-                        messages.info(request, f"La cuenta no ha sido activa, porfavor usa el link enviado a tu correo para activarla.")
+                        messages.info(request, f"La cuenta no ha sido activada, porfavor usa el link enviado a tu correo para activarla.")
                         return redirect("login")
                 else:
                     user = User.objects.get(email=userName.lower())
@@ -86,7 +86,6 @@ def login(request):
                     History.objects.create_history(request.user,"Login Fallido")
                     return redirect("login")
             else:
-                History.objects.create_history(request.user,"Login Fallido")
                 messages.error(request, f"Lo sentimos. No tienes más intentos disponibles hoy.")
                 return redirect("login")
         else:

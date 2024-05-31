@@ -1,4 +1,5 @@
 {% load static %}
+{% load socialaccount %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -34,33 +35,32 @@
             <!--Formulario de login y registro-->
             <div class="contenedor__login-register">
 
-                <!--Login-->
-                <form method ="POST" class="formulario__login">
-                    {% csrf_token %}
-                    <h2>Iniciar Sesión</h2>
-                    <input name = "username" type="text" maxlength ="200"  placeholder="Usuario">
-                    <input name = "password" type="password"  maxlength ="200" placeholder="Contraseña" required>
-                    <a class="forgot-link" href="/password_reset/">¿Olvidaste tu contraseña?</a>
-                    <a class="forgot-link" href="/">Navega sin cuenta</a>
-                    <button>Entrar</button>
-                    {% if messages %}
-                        {% for message in messages %}
-                            <div class="alerta {{ message.tags }}">
-                                <div class="icono-alerta">
-                                    <span class="material-symbols-outlined">
-                                        info
-                                    </span>
-                                </div>
-                                <div class="texto-alerta">
-
-
-                                    <h5>{{ message }}</h5>
-
-                                </div>
-                            </div>
-                        {% endfor %}
-                    {% endif %}
-                </form>
+<!--Login-->
+<form method ="POST" class="formulario__login">
+    {% csrf_token %}
+    <h2>Iniciar Sesión</h2>
+    <input name = "username" type="text" maxlength ="200"  placeholder="Usuario">
+    <input name = "password" type="password"  maxlength ="200" placeholder="Contraseña" required>
+    <a class="forgot-link" href="/password_reset/">¿Olvidaste tu contraseña?</a>
+    <a class="forgot-link" href="/">Navega sin cuenta</a>
+    <button>Entrar</button>
+    <button style="background: #3367D6;"> <a href="{% provider_login_url 'google' %}" style="color: aliceblue;">Inicia sesión con Google</a></button>
+    <button style="background: #3d08c1;"> <a href="{% provider_login_url 'github' %}" style="color: aliceblue";>Inicia sesión con GitHub</a></button>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alerta {{ message.tags }}">
+                <div class="icono-alerta">
+                    <span class="material-symbols-outlined">
+                        info
+                    </span>
+                </div>
+                <div class="texto-alerta">
+                    <h5>{{ message }}</h5>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</form>
                 <!--Registro-->
                 <form action="/signup/" method="POST" class="formulario__register">
                     {% csrf_token %}

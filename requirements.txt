@@ -8,3 +8,4 @@ python-decouple
 dj-database-url
 whitenoise
 django-recaptcha
+django-allauth[socialaccount]
